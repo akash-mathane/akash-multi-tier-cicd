@@ -47,7 +47,7 @@ pipeline {
 
         stage('Publish Artifacts to Nexus') {
             steps {
-                withMaven(maven: 'Maven 3', options: [configFileProvider('settings-maven')]) {
+                withMaven(maven: 'maven3', options: [configFileProvider('settings-maven')]) {
                     sh 'mvn deploy -DskipTests=true'
                 }
             }
