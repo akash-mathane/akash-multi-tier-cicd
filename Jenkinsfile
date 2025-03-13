@@ -32,12 +32,20 @@ pipeline {
         }
 
         stage('Static Code Analysis (SonarQube)') {
-            steps {
-                withSonarQubeEnv('sonar-server') { // Use SonarQube token
-                    sh "$SCANNER_HOME/bin/sonar-scanner -Dsonar.projectKey=bankapp -Dsonar.sources=src"
-                }
+    steps {
+        withSonarQubeEnv('sonar-server') { // Ensure correct SonarQube server name
+            withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_AUTH_TOKEN')]) {
+                sh '''
+                    /var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/sonar-scanner/bin/sonar-scanner \
+                    -Dsonar.projectKey=bankapp \
+                    -Dsonar.sources=src \
+                    -Dsonar.host.url=http://3.109.1.186:9000 \
+                    -Dsonar.login=$SONAR_AUTH_TOKEN
+                '''
             }
         }
+    }
+}
 
         stage('Build Package') {
             steps {
