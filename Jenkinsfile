@@ -33,7 +33,7 @@ pipeline {
 
         stage('Static Code Analysis (SonarQube)') {
             steps {
-                withSonarQubeEnv('sonar-token') { // Use SonarQube token
+                withSonarQubeEnv('sonar-server') { // Use SonarQube token
                     sh "$SCANNER_HOME/bin/sonar-scanner -Dsonar.projectKey=bankapp -Dsonar.sources=src"
                 }
             }
